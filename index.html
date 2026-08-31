@@ -7,6 +7,7 @@
 
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
  <div class="Navbar">
     <h1>SecureShare</h1>
@@ -29,7 +30,7 @@
     <button>Learn More</button>
     </div>
 
-    <div class="transfer-box">
+   <div class="transfer-box" id="dropBox">
 
     <div class="upload-icon">
         ↑
@@ -39,10 +40,25 @@
 
     <p>or click to browse</p>
 
-    <span>🔒 Secure & Encrypted</span>
+    <input type="file" id="fileInput" hidden>
 
+<p id="fileInfo"></p>
+
+<input
+    type="password"
+    id="passwordInput"
+    placeholder="Enter encryption password"
+>
+
+<button id="encryptBtn">Encrypt File</button>
+
+<p id="status"></p>
+
+<span>🔒 Secure & Encrypted</span>
 </div>
 </div>
 
+
+<script src="script.js"></script>
 </body>
 </html>
