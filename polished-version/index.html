@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureShare — Client-Side File Encryption & Decryption</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- CINEMATIC FIERY PORTAL OVERLAY (AUTOMATICALLY TRIGGERED ON ENCRYPT/DECRYPT) -->
+    <div class="hero-portal-overlay" id="heroPortalOverlay">
+        <canvas id="heroPortalCanvas"></canvas>
+        <div class="portal-status-label" id="heroPortalStatus">INITIALIZING CRYPTO PORTAL...</div>
+        <button class="skip-portal-btn" id="skipPortalBtn">Skip Animation ✕</button>
+    </div>
+
+    <!-- BACKGROUND GLOWS & GRID -->
+    <div class="page-background">
+        <div class="grid"></div>
+        <div class="glow glow-one"></div>
+        <div class="glow glow-two"></div>
+        <div class="orange-line"></div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- PORTAL LOGIN MODAL -->
+    <div class="modal-backdrop" id="portalModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <div class="portal-badge">SECURE GATEWAY v2.4</div>
+                <button class="modal-close" id="closeModalBtn">&times;</button>
+            </div>
+            <h3>Connect to Transfer Portal</h3>
+            <p>Authenticate your zero-knowledge browser identity to beam files directly.</p>
+
+            <div class="modal-input-group">
+                <label>Portal Address</label>
+                <input type="text" value="portal.secureshare.io/session-892" readonly class="input-readonly">
+            </div>
+
+            <div class="modal-input-group">
+                <label>Session Passkey</label>
+                <input type="password" id="modalPass" placeholder="••••••••••••">
+            </div>
+
+            <button class="portal-connect-btn" id="portalConnectBtn">
+                Initialize Secure Handshake
+            </button>
+            <div class="modal-footnote">🔒 End-to-end encrypted zero-knowledge channel</div>
+        </div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="#" class="logo">
+            Secure<span>Share</span>
+        </a>
+
+        <div class="nav-links">
+            <a href="#home">Home</a>
+            <a href="#transfer">Encrypt & Decrypt</a>
+            <a href="#how-to-use">How to Use</a>
+            <a href="#about">About</a>
+
+            <button class="login-btn" id="loginBtn">
+                Portal Login
+            </button>
+        </div>
+    </nav>
+
+    <main>
+        <!-- HERO SECTION -->
+        <section class="hero" id="home">
+            <div class="hero-left">
+                <div class="eyebrow">
+                    <span></span>
+                    PRIVATE • SECURE • SIMPLE
+                </div>
+
+                <h1>
+                    Secure file
+                    <br>
+                    transfer,
+                    <em>built for privacy.</em>
+                </h1>
+
+                <p class="hero-text">
+                    Encrypt or decrypt your files directly in your browser with password-protected AES-256 keys.
+                    Zero-knowledge, client-side cryptographic processing.
+                </p>
+
+                <div class="hero-actions">
+                    <button class="start-btn" id="startTransferBtn">
+                        Get Started
+                        <span>→</span>
+                    </button>
+
+                    <button class="learn-btn" id="watchHowToBtn">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor" style="margin-right: 6px; vertical-align: -1px;">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                        How to Use
+                    </button>
+                </div>
+
+                <div class="security-meta">
+                    <div>
+                        <strong>AES-256</strong>
+                        <small>GCM Cipher</small>
+                    </div>
+                    <div class="meta-divider"></div>
+                    <div>
+                        <strong>100%</strong>
+                        <small>Browser-side</small>
+                    </div>
+                    <div class="meta-divider"></div>
+                    <div>
+                        <strong>TWO-WAY</strong>
+                        <small>Encrypt & Decrypt</small>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-right">
+                <div class="transfer-card" id="transfer">
+                    <!-- MODE TOGGLER (ENCRYPT / DECRYPT) -->
+                    <div class="mode-switch-wrapper">
+                        <button class="mode-btn active" id="modeEncryptBtn" type="button">🔒 Encrypt</button>
+                        <button class="mode-btn" id="modeDecryptBtn" type="button">🔓 Decrypt</button>
+                    </div>
+
+                    <div class="card-top">
+                        <div>
+                            <span class="card-label" id="cardLabel">SECURE FILE ENCRYPTION</span>
+                            <h2 id="cardHeading">Encrypt a file</h2>
+                        </div>
+                        <div class="status-dot">
+                            <span></span>
+                            Ready
+                        </div>
+                    </div>
+
+                    <!-- DROP ZONE -->
+                    <div class="drop-zone" id="dropBox">
+                        <div class="upload-circle" id="uploadCircle">
+                            <span id="uploadIcon">↑</span>
+                        </div>
+
+                        <h3 id="uploadTitle">Drop your file here</h3>
+                        <p id="uploadDescription">or click anywhere to browse</p>
+
+                        <input type="file" id="fileInput" hidden>
+                        <div class="file-info" id="fileInfo"></div>
+                    </div>
+
+                    <!-- PASSWORD INPUT BOX -->
+                    <div class="password-area">
+                        <div class="password-label-row">
+                            <label for="passwordInput" id="passwordLabel">Encryption password</label>
+                            <span class="strength-text" id="strengthText">Strength: none</span>
+                        </div>
+
+                        <div class="password-input">
+                            <input
+                                type="password"
+                                id="passwordInput"
+                                placeholder="Enter password"
+                                autocomplete="off"
+                            >
+                            <button type="button" id="togglePassword">
+                                Show
+                            </button>
+                        </div>
+
+                        <div class="strength-bar-container" id="strengthContainer">
+                            <div class="strength-bar" id="strengthBar"></div>
+                        </div>
+                    </div>
+
+                    <button class="encrypt-btn" id="actionBtn">
+                        <span id="actionBtnText">Encrypt File</span>
+                        <span class="loader" id="actionLoader"></span>
+                    </button>
+
+                    <p class="status" id="status" aria-live="polite"></p>
+
+                    <!-- DOWNLOAD READY -->
+                    <div class="download-area" id="downloadArea">
+                        <div class="success-icon" id="downloadSuccessIcon">✓</div>
+                        <div class="download-info">
+                            <strong id="downloadTitle">Encryption complete</strong>
+                            <small id="downloadSubtitle">Your processed file is ready.</small>
+                        </div>
+                        <a href="#" id="downloadLink" class="download-btn">
+                            Download
+                        </a>
+                    </div>
+
+                    <div class="card-footer">
+                        <span id="footerLockIcon">🔒</span>
+                        <span id="footerCipherNote">AES-256-GCM cipher</span>
+                        <span class="footer-right">Local WebCrypto</span>
+                    </div>
+                </div>
+
+                <div class="floating-note note-one">
+                    <span>01</span> Choose file
+                </div>
+                <div class="floating-note note-two">
+                    <span id="floatingNoteTwoNum">02</span> <span id="floatingNoteTwoText">Encrypt locally</span>
+                </div>
+            </div>
+        </section>
+
+        <!-- HOW TO USE INTERACTIVE VIDEO HUD -->
+        <section class="portal-section" id="how-to-use">
+            <div class="section-header">
+                <span class="section-eyebrow">STEP-BY-STEP TUTORIAL</span>
+                <h2>How to Use SecureShare</h2>
+                <p>Follow the visual guide below to learn how simple it is to encrypt and decrypt sensitive files in seconds.</p>
+            </div>
+
+            <div class="tutorial-steps-bar">
+                <div class="step-card active" data-step="1">
+                    <span class="step-num">Step 1</span>
+                    <strong>Select or Drop File</strong>
+                </div>
+                <div class="step-card" data-step="2">
+                    <span class="step-num">Step 2</span>
+                    <strong>Set Secret Password</strong>
+                </div>
+                <div class="step-card" data-step="3">
+                    <span class="step-num">Step 3</span>
+                    <strong>Run Browser Crypto</strong>
+                </div>
+                <div class="step-card" data-step="4">
+                    <span class="step-num">Step 4</span>
+                    <strong>Download Clean File</strong>
+                </div>
+            </div>
+
+            <div class="portal-hud-card">
+                <div class="hud-top">
+                    <div class="hud-status">
+                        <span class="pulse-light"></span>
+                        <span>GUIDE: <strong id="portalPhaseText">STEP 1: SELECT FILE</strong></span>
+                    </div>
+                    <div class="hud-badge">HOW TO USE GUIDE</div>
+                    <div class="hud-ping">SPEED: <span>REAL-TIME</span></div>
+                </div>
+
+                <div class="portal-video-viewport" id="portalViewport">
+                    <canvas id="portalMovieCanvas"></canvas>
+
+                    <div class="portal-video-overlay" id="portalOverlay">
+                        <button class="portal-play-btn" id="playPortalBtn" aria-label="Play How to Use Guide">
+                            <svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor">
+                                <polygon points="6 4 20 12 6 20 6 4"></polygon>
+                            </svg>
+                        </button>
+                        <span id="overlayCaption">Click to Watch the "How to Use" Guide</span>
+                    </div>
+
+                    <div class="portal-controls">
+                        <button class="hud-btn" id="portalPlayToggle" title="Play/Pause">
+                            <span id="portalPlayIcon">▶</span>
+                        </button>
+
+                        <div class="portal-timeline" id="portalTimeline">
+                            <div class="portal-timeline-progress" id="portalProgress"></div>
+                            <div class="portal-timeline-scrubber" id="portalScrubber"></div>
+                        </div>
+
+                        <span class="portal-timer" id="portalTimeText">00:00.0 / 00:08.0</span>
+
+                        <button class="hud-btn replay-btn" id="portalReplayBtn" title="Replay from start">
+                            ↻ Replay
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ABOUT & FAQ SECTION -->
+        <section class="about" id="about">
+            <span class="section-eyebrow">SECURITY ARCHITECTURE</span>
+            <h2>Privacy starts <span>on your device.</span></h2>
+            <p>
+                SecureShare uses native browser Web Cryptography API standards to protect and restore your files
+                without intermediate servers.
+            </p>
+
+            <div class="faq-container">
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>How do I decrypt a file someone sent me?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>Toggle to "Decrypt" mode, drop the <code>.encrypted</code> file into the box, enter the exact password used to encrypt it, and click "Decrypt File".</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>Why does the password box clear automatically?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>For your security, SecureShare wipes the password field whenever switching modes or when an operation completes, ensuring zero residual plainkeys remain in browser memory.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <button class="faq-question">
+                        <span>What if I enter the wrong password during decryption?</span>
+                        <span class="faq-icon">+</span>
+                    </button>
+                    <div class="faq-answer">
+                        <p>AES-GCM authenticates every byte. If the password is wrong, the browser fails the cryptographic authentication tag and halts safely without damaging your data.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
