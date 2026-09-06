@@ -1,8 +1,7 @@
 # 🔐 SecureShare — Encrypted File Sharing System
 
+![SecureShare Preview](secure-share-preview.png)
 A secure web-based file sharing system designed to protect files using AES-256 encryption before they are stored or shared.
-
-## 📌 About the Project
 
 ## 📌 About the Project
 
