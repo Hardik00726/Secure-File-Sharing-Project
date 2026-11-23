@@ -1158,3 +1158,33 @@ body {
     .tutorial-steps-bar { grid-template-columns: 1fr; }
     .portal-video-viewport { height: 320px; }
 }
+
+/* ===================================================
+   QR FILE TRANSFER PANEL
+=================================================== */
+.qr-transfer-panel {
+    display: none;
+    margin-top: 18px;
+    padding: 20px;
+    background: #0b0b0e;
+    border: 1px solid #292929;
+    border-radius: 10px;
+    text-align: center;
+}
+.qr-transfer-panel.visible { display: block; animation: appear .35s ease; }
+.qr-transfer-heading h3 { margin: 8px 0; color: #f5f5f5; font-size: 18px; }
+.qr-transfer-heading p { max-width: 360px; margin: 8px auto; color: #888; font-size: 12px; line-height: 1.6; }
+.qr-label { color: #ff6b00; font-size: 10px; font-weight: 700; letter-spacing: 2px; }
+.qr-generate-btn { width: 100%; padding: 13px; margin-top: 12px; background: #ff6b00; border: 0; border-radius: 6px; color: #080808; font-weight: 700; cursor: pointer; transition: .2s; }
+.qr-generate-btn:hover { background: #ff8130; transform: translateY(-2px); }
+.qr-generate-btn:disabled { opacity: .65; cursor: wait; transform: none; }
+.qr-result { display: none; margin-top: 20px; }
+.qr-result.visible { display: block; }
+#qrCode { display: flex; justify-content: center; align-items: center; width: fit-content; min-width: 240px; min-height: 240px; margin: 15px auto; padding: 10px; background: #fff; border-radius: 8px; }
+#qrCode img, #qrCode canvas { display: block; max-width: 100%; height: auto; }
+.qr-instruction { max-width: 300px; margin: 12px auto; color: #aaa; font-size: 12px; line-height: 1.6; }
+.qr-copy-btn { padding: 9px 18px; background: #171717; border: 1px solid #ff6b00; border-radius: 5px; color: #ff8130; cursor: pointer; font-size: 12px; }
+.qr-copy-btn:hover { background: #ff6b00; color: #080808; }
+.qr-share-status { margin-top: 12px; color: #78b984; font-size: 11px; overflow-wrap: anywhere; }
+.qr-expiry { margin-top: 8px; color: #666; font-size: 10px; }
+@media (max-width: 600px) { .qr-transfer-panel { padding: 15px; } #qrCode { min-width: 220px; min-height: 220px; } }

@@ -1,0 +1,26 @@
+{
+  "name": "secure-file-sharing-project",
+  "version": "1.0.0",
+  "description": "🌐 **[Live Demo](YOUR_DEPLOYED_WEBSITE_LINK)**",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Hardik00726/Secure-File-Sharing-Project.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Hardik00726/Secure-File-Sharing-Project/issues"
+  },
+  "homepage": "https://github.com/Hardik00726/Secure-File-Sharing-Project#readme",
+  "dependencies": {
+    "express": "^5.3.0",
+    "multer": "^2.5.0"
+  }
+}
